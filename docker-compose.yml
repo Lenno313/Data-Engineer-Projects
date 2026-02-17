@@ -10,3 +10,14 @@ services:
       - PYTHONUNBUFFERED=1
       - PYTHONPATH=/app
     restart: no
+  f1_data:
+    build:
+      context: .
+      dockerfile: projects/f1_data_loader/Dockerfile
+    container_name: f1_data_loader
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    restart: no

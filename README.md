@@ -12,15 +12,10 @@ Ziel dieses Repositories ist es, bisherige Projekte von mir einmal zu Modularisi
 ### Projekt 1: F1 Telemetry & Race Analytics
 
 #### Zusammenfassung
-Automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1. Dieses Projekt simuliert den Umgang mit hochpräzisen Transaktionsdaten.
+Abrufen von den Ergebnissen der Formel 1 Rennen. Ebenso eine automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1.
 
 <details>
 <summary>Details anzeigen</summary>
-
-#### Tech-Stack
-- **Quelle:** FastF1 Library / Ergast API
-- **Processing:** Python (Pandas zur Bereinigung von Zeitstempeln)
-- **Persistence:** SQLAlchemy Models (Hierarchische Struktur: Race -> Driver -> Lap)
 
 #### Beschreibung
 
@@ -36,12 +31,8 @@ Automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1. Dieses Pro
 <details>
 <summary>Details anzeigen</summary>
 
-#### Tech-Stack
-- **Quelle:** Web-Scraping (BeautifulSoup / Requests)
-- **Transform:** Cleaning-Logik (z.B. Umwandlung von "1.2K" Strings in Integer `1200`)
-- **Storage:** PostgreSQL
-
 #### Beschreibung
+
 
 </details>
 
@@ -55,11 +46,6 @@ Abruf von persönlichen Aktivitätsdaten (Leistung, Herzfrequenz, GPS). Vorberei
 <details>
 <summary>Details anzeigen</summary>
 
-#### Tech-Stack
-- **Quelle:** Garmin Connect API
-- **Format:** JSON-Parsing komplexer Nested Objects
-- **DB:** SQL-Datenbank (Normalisierte Tabellen für Aktivitäten und Splits)
-
 #### Beschreibung
 
 </details>
@@ -68,12 +54,12 @@ Abruf von persönlichen Aktivitätsdaten (Leistung, Herzfrequenz, GPS). Vorberei
 
 ## Infrastruktur (Raspberry Pi Setup)
 
-Das gesamte Lab wird über eine zentrale `docker-compose.yml` auf einem Raspberry Pi gesteuert.
+Die wird über eine zentrale `docker-compose.yml` auf einem Raspberry Pi gesteuert.
 
 <details>
 <summary>Infrastruktur-Details & Docker-Setup</summary>
 
-- **Datenbank:** PostgreSQL Container mit persistenten Volumes auf einer externen SSD.
+- **Datenbank:** PostgreSQL Container mit persistenten Volumes auf einer externen Festplatte.
 - **Automatisierung:** - Die Skripte werden über Cronjobs auf dem Host-System oder innerhalb eines speziellen Cron-Containers getriggert.
   - Secrets (Passwörter/Keys) werden sicher über `.env`-Dateien verwaltet.
 - **Monitoring:** (Geplant) Dashboard zur Überwachung der Pipeline-Status.
@@ -85,7 +71,14 @@ Das gesamte Lab wird über eine zentrale `docker-compose.yml` auf einem Raspberr
 ## Roadmap
 #### Phase 1 - Code-Modularisierung & Aufsetzen der Infrastruktur
 - [ ] Überführung der bestehenden Scraping-, FastF1- und Garmin-Skripte in eine geordnete Klassenstruktur (Ingestor-Pattern).
+    - [ ] F1-Daten
+    - [x] FUT-Scraper
+    - [ ] Garmin-Daten
 - [ ] Initialer Aufbau der Datenbank-Schemata (SQLAlchemy).
+    - [ ] F1-Daten
+    - [x] FUT-Scraper
+    - [ ] Garmin-Daten
+- [x] Erstellen & Testen von docker-compose & Dockerfiles
 - [ ] Neuaufsetzen des Raspberry Pi OS (Lite) und Konfiguration der Docker-Engine sowie Docker Compose.
 
 #### Phase 2 

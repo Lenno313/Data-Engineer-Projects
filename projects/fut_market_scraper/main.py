@@ -1,5 +1,3 @@
-print("--- DEBUG: init_db wurde aufgerufen ---")
-
 from database import get_db_session, init_db
 from projects.fut_market_scraper.ingestor import FifaPriceIngestor
 from loguru import logger
