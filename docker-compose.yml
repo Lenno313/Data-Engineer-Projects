@@ -1,0 +1,12 @@
+services:
+  scraper:
+    build:
+      context: .
+      dockerfile: projects/fut_market_scraper/Dockerfile
+    container_name: fifa_scraper
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    restart: no
