@@ -1,8 +1,8 @@
 # Data-Engineer-Projects
 
-Herzlich willkommen in meinem Data Engineering Repository! Hier dokumentiere ich den Aufbau und die Automatisierung verschiedener Daten-Pipelines, die auf einem **Raspberry Pi Home-Server** in einer **Docker-Umgebung** laufen.
+Herzlich willkommen in meinem Data Engineering Repository! Hier dokumentiere ich den Aufbau und die Automatisierung verschiedener Daten-Pipelines, die auf einem **Raspberry Pi Home-Server** in einer **Docker-Umgebung** laufen sollen.
 
-## Vision
+## Motivation
 Ziel dieses Repositories ist es, bisherige Projekte von mir einmal zu Modularisieren und in strukturierte Daten-Pipelines zu verpacken.
 
 ---
@@ -15,7 +15,7 @@ Ziel dieses Repositories ist es, bisherige Projekte von mir einmal zu Modularisi
 Automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1. Dieses Projekt simuliert den Umgang mit hochpräzisen Transaktionsdaten.
 
 <details>
-<summary>▶ Details anzeigen</summary>
+<summary>Details anzeigen</summary>
 
 #### Tech-Stack
 - **Quelle:** FastF1 Library / Ergast API
@@ -34,7 +34,7 @@ Automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1. Dieses Pro
 Überwachung von Spielerpreisen auf dem Transfermarkt. Fokus liegt auf der Extraktion von Daten aus HTML-Strukturen, wo keine offizielle API existiert.
 
 <details>
-<summary>▶ Details anzeigen</summary>
+<summary>Details anzeigen</summary>
 
 #### Tech-Stack
 - **Quelle:** Web-Scraping (BeautifulSoup / Requests)
@@ -53,7 +53,7 @@ Automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1. Dieses Pro
 Abruf von persönlichen Aktivitätsdaten (Leistung, Herzfrequenz, GPS). Vorbereitung der Daten für ein späteres BI-Dashboard.
 
 <details>
-<summary>▶ Details anzeigen</summary>
+<summary>Details anzeigen</summary>
 
 #### Tech-Stack
 - **Quelle:** Garmin Connect API
@@ -71,7 +71,7 @@ Abruf von persönlichen Aktivitätsdaten (Leistung, Herzfrequenz, GPS). Vorberei
 Das gesamte Lab wird über eine zentrale `docker-compose.yml` auf einem Raspberry Pi gesteuert.
 
 <details>
-<summary>▶ Infrastruktur-Details & Docker-Setup</summary>
+<summary>Infrastruktur-Details & Docker-Setup</summary>
 
 - **Datenbank:** PostgreSQL Container mit persistenten Volumes auf einer externen SSD.
 - **Automatisierung:** - Die Skripte werden über Cronjobs auf dem Host-System oder innerhalb eines speziellen Cron-Containers getriggert.
