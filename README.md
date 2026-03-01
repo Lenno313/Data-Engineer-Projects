@@ -12,17 +12,17 @@ Ziel dieses Repositories ist es, bisherige Projekte von mir zu modularisieren un
 ### Projekt 1: F1 Telemetry & Race Analytics
 
 #### Zusammenfassung
-Dieses Projekt ist zweigeteilt: **Ia** befasst sich mit der hochfrequenten Echtzeit-Telemetrie via SignalR, während **Ib** ein klassisches Data Warehouse für historische Rennergebnisse aufbaut.
+Dieses Projekt ist zweigeteilt: **1a** befasst sich mit der hochfrequenten Echtzeit-Telemetrie via SignalR, während **1b** ein klassisches Data Warehouse für historische Rennergebnisse aufbaut.
 
 <details>
 <summary>Details anzeigen</summary>
 
-#### Projekt Ia: Live-Telemetrie (Streaming)
+#### Projekt 1a: Live-Telemetrie (Streaming)
 - **Architektur:** Event-driven Ingestor mit asynchronen Callbacks.
 - **Features:** In-Memory-Buffering für Bulk-Inserts, Backup-Load-Logik bei Verbindungsabbruch.
 - **Tech-Stack:** FastF1 (Livetiming Client), SignalR, NumPy (Resampling).
 
-#### Projekt Ib: Race History (Batch / Warehouse)
+#### Projekt 1b: Race History (Batch / Warehouse)
 - **Architektur:** Klassische ETL-Pipeline zur Historisierung von Saisondaten.
 - **Datenmodell:** Implementierung eines Star-Schemas in SQL.
 - **Tech-Stack:** Pandas, SQLAlchemy.
