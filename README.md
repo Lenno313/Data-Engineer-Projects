@@ -3,7 +3,7 @@
 Herzlich willkommen in meinem Data Engineering Repository! Hier dokumentiere ich den Aufbau und die Automatisierung verschiedener Daten-Pipelines, die auf einem **Raspberry Pi Home-Server** in einer **Docker-Umgebung** laufen sollen.
 
 ## Motivation
-Ziel dieses Repositories ist es, bisherige Projekte von mir einmal zu Modularisieren und in strukturierte Daten-Pipelines zu verpacken.
+Ziel dieses Repositories ist es, bisherige Projekte von mir zu modularisieren und in strukturierte Daten-Pipelines zu verpacken.
 
 ---
 
@@ -12,13 +12,20 @@ Ziel dieses Repositories ist es, bisherige Projekte von mir einmal zu Modularisi
 ### Projekt 1: F1 Telemetry & Race Analytics
 
 #### Zusammenfassung
-Abrufen von den Ergebnissen der Formel 1 Rennen. Ebenso eine automatisierte Erfassung von Runden- und Sektorenzeiten der Formel 1.
+Dieses Projekt ist zweigeteilt: **Ia** befasst sich mit der hochfrequenten Echtzeit-Telemetrie via SignalR, während **Ib** ein klassisches Data Warehouse für historische Rennergebnisse aufbaut.
 
 <details>
 <summary>Details anzeigen</summary>
 
-#### Beschreibung
+#### Projekt Ia: Live-Telemetrie (Streaming)
+- **Architektur:** Event-driven Ingestor mit asynchronen Callbacks.
+- **Features:** In-Memory-Buffering für Bulk-Inserts, Backup-Load-Logik bei Verbindungsabbruch.
+- **Tech-Stack:** FastF1 (Livetiming Client), SignalR, NumPy (Resampling).
 
+#### Projekt Ib: Race History (Batch / Warehouse)
+- **Architektur:** Klassische ETL-Pipeline zur Historisierung von Saisondaten.
+- **Datenmodell:** Implementierung eines Star-Schemas in SQL.
+- **Tech-Stack:** Pandas, SQLAlchemy.
 </details>
 
 ---
@@ -32,8 +39,9 @@ Abrufen von den Ergebnissen der Formel 1 Rennen. Ebenso eine automatisierte Erfa
 <summary>Details anzeigen</summary>
 
 #### Beschreibung
-
-
+- **Scraping-Layer:** Headless-Browser-Automatisierung mit Playwright zum Umgehen dynamischer Inhalte.
+- **Datenfluss:** Transformation von HTML-Rohdaten in relationale Strukturen via SQLAlchemy.
+- **Automatisierung:** Zeitgesteuerte Preisabfragen (Cron-Jobs) zur Erstellung von Zeitreihen-Analysen der Marktwerte.
 </details>
 
 ---
@@ -41,20 +49,22 @@ Abrufen von den Ergebnissen der Formel 1 Rennen. Ebenso eine automatisierte Erfa
 ### Projekt 3: Garmin Health & Activity Ingestor 
 
 #### Zusammenfassung
-Abruf von persönlichen Aktivitätsdaten (Leistung, Herzfrequenz, GPS). Vorbereitung der Daten für ein späteres BI-Dashboard.
+Abruf von persönlichen Aktivitätsdaten (Leistung, Herzfrequenz, GPS, etc.). Vorbereitung der Daten für ein späteres Dashboard.
 
 <details>
 <summary>Details anzeigen</summary>
 
 #### Beschreibung
-
+- **Ingestion:** Anbindung an die Garmin Connect API zum Download verschachtelter JSON-Aktivitätsfiles.
+- **Data Cleansing:** Flattening von komplexen JSON-Strukturen in flache Tabellenformate.
+- **Ziel:** Bereitstellung von KPIs zur Belastungssteuerung und langfristigen Fitness-Entwicklung.
 </details>
 
 ---
 
 ## Infrastruktur (Raspberry Pi Setup)
 
-Die wird über eine zentrale `docker-compose.yml` auf einem Raspberry Pi gesteuert.
+Die Steuerung erfolgt über eine zentrale `docker-compose.yml` auf einem Raspberry Pi.
 
 <details>
 <summary>Infrastruktur-Details & Docker-Setup</summary>
@@ -70,24 +80,25 @@ Die wird über eine zentrale `docker-compose.yml` auf einem Raspberry Pi gesteue
 
 ## Roadmap
 #### Phase 1 - Code-Modularisierung & Aufsetzen der Infrastruktur
-- [ ] Überführung der bestehenden Scraping-, FastF1- und Garmin-Skripte in eine geordnete Klassenstruktur (Ingestor-Pattern).
-    - [ ] F1-Daten
+- [ ] Überführung der Skripte in eine geordnete Klassenstruktur (Ingestor-Pattern).
+    - [ ] Projekt Ia: Live-Ingestor Logik (SignalR & Buffering)
+    - [ ] Projekt Ib: History-ETL Pipeline
     - [x] FUT-Scraper
     - [ ] Garmin-Daten
 - [ ] Initialer Aufbau der Datenbank-Schemata (SQLAlchemy).
-    - [ ] F1-Daten
-    - [x] FUT-Scraper
-    - [ ] Garmin-Daten
+    - [ ] F1 Star-Schema (Fact/Dimension Tables)
+    - [x] FUT-Spielerpreise Schema
+    - [ ] Garmin-Daten Schema
 - [x] Erstellen & Testen von docker-compose & Dockerfiles
 - [ ] Neuaufsetzen des Raspberry Pi OS (Lite) und Konfiguration der Docker-Engine sowie Docker Compose.
 
 #### Phase 2 
 - [ ] Database Layer: Deployment des PostgreSQL-Containers
 - [ ] Containerisierung: Erstellung von Docker-Images für jeden Ingestor.
-- [ ] Automation: Implementierung der Cron-Logik zur regelmäßigen Datenabfrage (FIFA z.B. täglich, F1 rennwochenendspezifisch).
+- [ ] Automation: Implementierung der Cron-Logik (FIFA täglich, F1 rennwochenendspezifisch).
 - [ ] Secret Management: Umstellung aller Hardcoded-Credentials auf Umgebungsvariablen (.env).
 
 #### Phase 3: Weitere Feature-Ideen wie Analytics & Monitoring einbauen
-- [ ] Data Quality Checks: Implementierung von Logging und einfachen Validierungsskripten, um Ingestions-Fehler frühzeitig zu erkennen.
-- [ ] Visualisierung: Aufbau eines Streamlit-Dashboards, das direkt auf die PostgreSQL-DB zugreift, um Preisverläufe (FIFA) und Sektorenvergleiche (F1) darzustellen.
-- [ ] Health Check: Einbindung eines einfachen Monitoring-Tools (z.B. Portainer oder sogar kurze Status-Mail), um den Zustand des Raspberry Pi zu überwachen.
+- [ ] Data Quality Checks: Validierungsskripte zur Erkennung von Ingestions-Fehlern.
+- [ ] Visualisierung: Aufbau eines Streamlit-Dashboards (Preisverläufe FIFA & Sektorenvergleiche F1).
+- [ ] Health Check: Einbindung eines Monitoring-Tools (z.B. Portainer) zur Systemüberwachung.
