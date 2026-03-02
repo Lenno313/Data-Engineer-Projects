@@ -42,6 +42,29 @@ Dieses Projekt ist zweigeteilt: **1a** befasst sich mit der hochfrequenten Echtz
 - **Scraping-Layer:** Headless-Browser-Automatisierung mit Playwright zum Umgehen dynamischer Inhalte.
 - **Datenfluss:** Transformation von HTML-Rohdaten in relationale Strukturen via SQLAlchemy.
 - **Automatisierung:** Zeitgesteuerte Preisabfragen (Cron-Jobs) zur Erstellung von Zeitreihen-Analysen der Marktwerte.
+
+#### Abfragen von Preisen einzelner Spieler
+Jede Spielerkarte hat in FUTWIZ eine eigene id, welche zusammen mit dem Spielernamen die URL vervollständigt (z.B. 'https://www.futwiz.com/fc26/player/cristiano-ronaldo/20785'). Da Spieler mehrere Karten besitzen können, ist diese id der Primärschlüssel zu den Karten.
+<img width="803" height="348" alt="image" src="https://github.com/user-attachments/assets/7147ccd1-6135-4db8-9539-fc9d90dcb2a2" />
+
+Auf der Spielerseite steht dann jeweils der Preis der Karte auf dem Playstation- und auf dem PC-Markt. Diesen können wir mittels der Playwright-API auslesen lassen.
+
+Welche Spielerkarten man abfragen möchte kann man in einer CSV-Datei eintragen, dazu benötigt man jeweils den Vornamen und Nachnamen des Spielers und ebenso die id der speziellen Karte.
+
+Vor der Preisabfrage werden Datenbankeinträge für die Spieler angelegt. Nach der Abfrage wird dann der Preis mit Zeitpunkt und entsprechender Karten-ID gespeichert.
+
+#### Abfragen von Preisen für bestimmte Bewertungen
+FUTWIZ bietet die Möglichkeit, sich die niedrigsten Preise für jede Spielerbewertung anzeigen zu lassen.
+Diese haben eine Relevanz für 'Squad-Building-Challenges', bei denen man Teams mit bestimmten Mindestanforderungen (zB. 86 Gesamtwertung) für Belohnungen eintauschen kann.
+<img width="787" height="599" alt="image" src="https://github.com/user-attachments/assets/2f791751-1524-4ce1-b214-a8a868d43cea" />
+
+Diese Bewertungen sind immer in der gleichen Reihenfolge und haben für die relevanten Bewertungen, bis 92 reicht, immer zehn Einträge.
+Somit kann ich mir auf Basis der gewünschten Bewertung (z.B. 89), die zehn Positionen der jeweiligen Preise berechnen und diese auslesen.
+
+Die Ergebnisse speichere ich als 'RatingSnapshots' in einer Tabelle. Diese enthält jeweils den Zeitpunkt, die Bewertung und den Preis. Zusätzlich schreibe ich in die Tabelle, der 'wie vielt günstigste' Preis es in dieser Bewertung war. So kann ich beispielsweise die günstigsten 5 Preise für die Bewertung in den letzten 3 Wochen auslesen. 
+<img width="765" height="313" alt="image" src="https://github.com/user-attachments/assets/5ab01aff-8057-4aed-b19d-3af33fe9be52" />
+
+Welche Bewertungen man abfragen möchte kann man in einer CSV-Datei eintragen.
 </details>
 
 ---
@@ -87,6 +110,7 @@ Die Steuerung erfolgt über eine zentrale `docker-compose.yml` auf einem Raspber
     - [ ] Garmin-Daten
 - [ ] Initialer Aufbau der Datenbank-Schemata (SQLAlchemy).
     - [ ] F1 Star-Schema (Fact/Dimension Tables)
+    - [x] Formel1-Historie (Star-Schema)
     - [x] FUT-Spielerpreise Schema
     - [ ] Garmin-Daten Schema
 - [x] Erstellen & Testen von docker-compose & Dockerfiles
