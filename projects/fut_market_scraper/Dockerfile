@@ -13,4 +13,4 @@ RUN playwright install chromium
 COPY . .
 
 # Befehl zum Starten
-CMD ["python", "projects/fut_market_scraper/main.py"]
+CMD ["python", "main.py"]

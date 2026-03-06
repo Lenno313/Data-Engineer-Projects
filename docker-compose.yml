@@ -1,17 +1,16 @@
-version: '3.8'
-
 services:
   # PostgrSQL Datenbank
   db:
-    image: postgres:15-alpine
-    container_name: f1_postgres
+    image: postgres:15
+    container_name: db_server
     restart: always
     environment:
-      POSTGRES_USER: ${DB_USER:-f1_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-f1_pass}
-      POSTGRES_DB: ${DB_NAME:-f1_db}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME_DEFAULT}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Links Pfad auf dem Pi, rechts Pfad im Container
+      - /mnt/data/postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -25,7 +24,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME_FUT}
       - PYTHONUNBUFFERED=1
     volumes:
       - ./projects/f1_live_tracker:/app
@@ -40,7 +39,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME_FUT}
     volumes:
       - ./projects/f1_history:/app
 
@@ -54,9 +53,16 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      # Hier sagst du dem Container, dass die DB im Docker-Netzwerk "db" heißt
+      - DB_HOST=db  
+      - DB_PORT=5432
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME_FUT}  # Hier legst du fest, in welche DB dieser Scraper schreibt
+      - PYTHONPATH=/app # Das ist der Zaubertrick!
     volumes:
-      - ./projects/fut_market_scraper:/app
+      - .:/app # Wir mounten das KOMPLETTE Hauptverzeichnis nach /app
+    working_dir: /app/projects/fut_market_scraper # Wir starten aber im Scraper-Ordner
 
 volumes:
   postgres_data:
