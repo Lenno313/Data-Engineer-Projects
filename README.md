@@ -1,4 +1,4 @@
-# Data-Engineer-Projects
+# Meine Portfolio-Projekte
 
 Herzlich willkommen in meinem Data Engineering Repository! Hier dokumentiere ich den Aufbau und die Automatisierung verschiedener Daten-Pipelines, die auf einem **Raspberry Pi Home-Server** in einer **Docker-Umgebung** laufen sollen.
 
